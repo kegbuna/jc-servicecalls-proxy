@@ -8,7 +8,7 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// The service call api client.
+    /// The service call API client.
     /// </summary>
     public class ServiceCallApiClient : IServiceCallApiClient
     {
@@ -29,7 +29,6 @@
         /// </summary>
         public ServiceCallApiClient(IOptions<CallClientSettings> settings)
         {
-            short limit;
             this._httpClient = new HttpClient();
             this._limit = settings.Value.Limit;
             this._baseUrl =
