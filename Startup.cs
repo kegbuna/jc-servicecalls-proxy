@@ -61,7 +61,7 @@ namespace JCServiceCallsProxy
             {
                 options.AddPolicy("AllowLocalhost", builder =>
                     builder
-                        .WithOrigins("http://localhost", "https://localhost")
+                        .WithOrigins("http://localhost", "https://localhost", "http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 
