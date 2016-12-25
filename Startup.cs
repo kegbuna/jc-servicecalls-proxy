@@ -9,6 +9,9 @@ using JCServiceCallsProxy.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -49,20 +52,35 @@ namespace JCServiceCallsProxy
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalhost", builder =>
+                    builder
+                        .WithOrigins("http://localhost", "https://localhost")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+
+                options.AddPolicy("AllowAll", builder => 
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
 
 
             services.AddOptions();
 
             services.AddSingleton<IServiceCallApiClient, ServiceCallApiClient>();
 
-            //services.Configure<CallClientSettings>(Configuration.GetSection("CallClientSettings"));
+            services.Configure<CallClientSettings>(options => Configuration.GetSection("CallClientSettings"));
 
-            services.AddCors();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +105,7 @@ namespace JCServiceCallsProxy
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
+            app.UseCors("AllowLocalhost");
 
             app.UseMvc(routes =>
             {
@@ -95,7 +114,7 @@ namespace JCServiceCallsProxy
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost", "https://localhost"));
+
         }
     }
 }
