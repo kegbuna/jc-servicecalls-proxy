@@ -43,7 +43,7 @@ namespace JCServiceCallsProxy.ServiceCalls
         public string IsPrimary { get; set; }
 
         [JsonProperty("LONGITUDE")]
-        public string Longitude { get; set; }
+        public float Longitude { get; set; }
 
         [JsonProperty("Priority")]
         public string Priority { get; set; }
@@ -58,7 +58,7 @@ namespace JCServiceCallsProxy.ServiceCalls
         public DateTime TimeDispatched { get; set; }
 
         [JsonProperty("LATITUDE")]
-        public string Latitude { get; set; }
+        public float Latitude { get; set; }
 
         [JsonProperty("GEO ERROR")]
         public string GeoError { get; set; }
