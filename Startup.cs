@@ -71,6 +71,12 @@ namespace JCServiceCallsProxy
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
+
+                options.AddPolicy("AllowGithub", builder =>
+                    builder
+                        .WithOrigins("https://kegbuna.github.io")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
             });
 
 
@@ -94,10 +100,13 @@ namespace JCServiceCallsProxy
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                app.UseCors("AllowLocalhost");
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseCors("AllowLocalhost");
+                app.UseCors("AllowGithub");
             }
 
             app.UseStaticFiles();
@@ -105,7 +114,6 @@ namespace JCServiceCallsProxy
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-            app.UseCors("AllowLocalhost");
 
             app.UseMvc(routes =>
             {
