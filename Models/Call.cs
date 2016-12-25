@@ -28,10 +28,10 @@ namespace JCServiceCallsProxy.ServiceCalls
         public string CallCode { get; set; }
 
         [JsonProperty("Time Arrived")]
-        public DateTime TimeArrived { get; set; }
+        public DateTimeOffset TimeArrived { get; set; }
 
         [JsonProperty("SHIFT")]
-        public string Shift { get; set; }
+        public short Shift { get; set; }
 
         [JsonProperty("UNIT ID")]
         public string UnitId { get; set; }
@@ -40,22 +40,22 @@ namespace JCServiceCallsProxy.ServiceCalls
         public string Address { get; set; }
 
         [JsonProperty("Is Primary")]
-        public string IsPrimary { get; set; }
+        public short IsPrimary { get; set; }
 
         [JsonProperty("LONGITUDE")]
         public float Longitude { get; set; }
 
         [JsonProperty("Priority")]
-        public string Priority { get; set; }
+        public short Priority { get; set; }
 
         [JsonProperty("Time Received")]
-        public DateTime TimeReceived { get; set; }
+        public DateTimeOffset TimeReceived { get; set; }
 
         [JsonProperty("GEO COUNT")]
         public string GeoCount { get; set; }
 
         [JsonProperty("Time Dispatched")]
-        public DateTime TimeDispatched { get; set; }
+        public DateTimeOffset TimeDispatched { get; set; }
 
         [JsonProperty("LATITUDE")]
         public float Latitude { get; set; }
