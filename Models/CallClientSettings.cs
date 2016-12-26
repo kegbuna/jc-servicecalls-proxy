@@ -17,11 +17,6 @@ namespace JCServiceCallsProxy.ServiceCalls
     public class CallClientSettings
     {
 
-        public CallClientSettings()
-        {
-            this.Limit = 50;
-        }
-
         /// <summary>
         /// The hostname of the server where the API is hosted
         /// </summary>

@@ -84,7 +84,12 @@ namespace JCServiceCallsProxy
 
             services.AddSingleton<IServiceCallApiClient, ServiceCallApiClient>();
 
-            services.Configure<CallClientSettings>(options => Configuration.GetSection("CallClientSettings"));
+            services.Configure<CallClientSettings>(callClientSettings =>
+            {
+                IConfigurationSection callClientSection = Configuration.GetSection("CallClientSettings");
+                callClientSettings.Limit = Int16.Parse(callClientSection["Limit"]);
+                callClientSettings.Domain = callClientSection["Domain"];
+            });
 
             services.AddMvc();
         }
