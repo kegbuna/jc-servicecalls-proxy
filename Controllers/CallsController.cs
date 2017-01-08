@@ -17,12 +17,14 @@ namespace JCServiceCallsProxy.Controllers
         }
 
         [Route("")]
+        [HttpGet]
         public CallQueryResult GetCalls()
         {
             return _apiClient.GetCalls();
         }
 
         [Route("{start}/{end}")]
+        [HttpGet]
         public CallQueryResult GetByDateRange(DateTimeOffset start, DateTimeOffset end)
         {
             return _apiClient.GetCalls(start, end);
