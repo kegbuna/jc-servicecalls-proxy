@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using JCServiceCallsProxy.Data;
 using JCServiceCallsProxy.Models;
 using JCServiceCallsProxy.ServiceCalls;
@@ -9,19 +6,20 @@ using JCServiceCallsProxy.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.Swagger.Model;
 
 namespace JCServiceCallsProxy
 {
     public class Startup
     {
+        /// <summary>
+        /// Startup configuration
+        /// </summary>
+        /// <param name="env">Provides env information</param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -41,7 +39,10 @@ namespace JCServiceCallsProxy
 
         private IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">The collection of services to be used by the api</param>
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
@@ -92,9 +93,29 @@ namespace JCServiceCallsProxy
             });
 
             services.AddMvc();
+
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "Jersey City Call Data Api",
+                    Description = "Retrieves service calls from the Jersey City PD Database",
+                    TermsOfService = "Be Gentle",
+                    Contact = new Contact() { Name = "Ken Egbuna", Email = "ken@egbuna.com" }
+                });
+
+                options.IncludeXmlComments("api.xml");
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Builds the application</param>
+        /// <param name="env">Provides env variables</param>
+        /// <param name="loggerFactory">Logs</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -104,7 +125,6 @@ namespace JCServiceCallsProxy
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
                 app.UseCors("AllowLocalhost");
             }
             else
@@ -120,14 +140,9 @@ namespace JCServiceCallsProxy
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-
+            app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUi();
         }
     }
 }
